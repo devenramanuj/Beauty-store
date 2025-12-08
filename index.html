@@ -6,7 +6,7 @@
     <title>Royal Beauty Jewellery</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* --- સ્ટાઈલિંગ (Design) --- */
+        /* --- થીમ અને કલર --- */
         :root {
             --primary: #c5a059; /* ગોલ્ડ કલર */
             --dark: #121212;    /* બ્લેક */
@@ -16,13 +16,13 @@
 
         body {
             margin: 0;
-            padding-bottom: 100px;
+            padding-bottom: 100px; /* ફૂટર માટે જગ્યા */
             background-color: var(--dark);
             color: var(--light);
             font-family: 'Poppins', sans-serif;
         }
 
-        /* હેડર */
+        /* --- હેડર --- */
         header {
             background: #000;
             padding: 15px 20px;
@@ -45,12 +45,12 @@
         }
 
         .cart-icon { font-size: 1.5rem; position: relative; cursor: pointer; }
-        .cart-count { position: absolute; top: -5px; right: -8px; background: red; color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; }
+        .cart-count { position: absolute; top: -5px; right: -8px; background: #d32f2f; color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; font-weight: bold;}
 
-        /* પ્રોડક્ટ લિસ્ટ */
+        /* --- પ્રોડક્ટ લિસ્ટ --- */
         .grid {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* બે લાઈન */
+            grid-template-columns: 1fr 1fr; /* મોબાઈલમાં બે કોલમ */
             gap: 15px;
             padding: 15px;
         }
@@ -61,6 +61,7 @@
             border-radius: 10px;
             overflow: hidden;
             transition: transform 0.2s;
+            position: relative;
         }
         
         .card:active { transform: scale(0.98); }
@@ -70,10 +71,11 @@
             height: 160px;
             object-fit: cover;
             border-bottom: 1px solid var(--primary);
+            background-color: #333;
         }
 
         .info { padding: 10px; text-align: center; }
-        .p-name { font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px;}
+        .p-name { font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; color: #eee;}
         .p-price { color: var(--primary); font-weight: bold; font-size: 1.1rem; }
         
         .add-btn {
@@ -88,7 +90,7 @@
             cursor: pointer;
         }
 
-        /* Admin Button (+) */
+        /* --- એડમિન બટન (+) --- */
         .admin-btn {
             position: fixed;
             bottom: 80px;
@@ -96,10 +98,10 @@
             background: #000;
             color: var(--primary);
             border: 2px solid var(--primary);
-            width: 55px;
-            height: 55px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            font-size: 30px;
+            font-size: 32px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -108,7 +110,7 @@
             z-index: 90;
         }
 
-        /* Modals (Popup) */
+        /* --- મોડલ (Popup Box) --- */
         .modal {
             display: none;
             position: fixed;
@@ -132,9 +134,9 @@
         }
         
         .modal-title { font-weight: bold; font-size: 1.1rem; }
-        .close-btn { font-size: 1.8rem; border: none; background: none; cursor: pointer; }
+        .close-btn { font-size: 2rem; border: none; background: none; cursor: pointer; color: #555; }
 
-        /* Upload Section Styles */
+        /* --- અપલોડ સેક્શન --- */
         .upload-section {
             background: #e3f2fd;
             padding: 20px;
@@ -152,6 +154,7 @@
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             margin-bottom: 10px;
+            font-size: 1rem;
         }
 
         .result-box {
@@ -163,14 +166,26 @@
             border-radius: 5px;
         }
 
-        iframe { width: 100%; height: 75vh; border: none; }
+        /* --- કાર્ટ --- */
+        .cart-modal { top: unset; bottom: 0; height: auto; max-height: 85vh; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 50px rgba(0,0,0,0.5); }
+        .whatsapp-btn { background: #25D366; color: white; width: 100%; padding: 12px; font-weight: bold; border: none; border-radius: 8px; margin-top: 10px; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px;}
+        
+        /* લોડર */
+        .loader { text-align: center; margin-top: 50px; color: var(--primary); font-size: 1.2rem; }
 
-        .loader { text-align: center; margin-top: 50px; color: var(--primary); }
-
-        /* Cart Styles */
-        .cart-modal { top: unset; bottom: 0; height: auto; max-height: 80vh; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
-        .whatsapp-btn { background: #25D366; color: white; width: 100%; padding: 12px; font-weight: bold; border: none; border-radius: 8px; margin-top: 10px; font-size: 1rem; }
-
+        /* ફોર્મ ફોલબેક બટન */
+        .fallback-btn {
+            width: 100%; 
+            background: white; 
+            color: #d32f2f; 
+            border: 1px solid #d32f2f; 
+            padding: 10px; 
+            border-radius: 5px; 
+            font-size: 0.9rem; 
+            cursor: pointer; 
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -201,23 +216,28 @@
             <input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none;" onchange="uploadImage()">
         </label>
         
-        <div id="statusMsg" style="color:#555; font-size:0.9rem;">(અહીં ક્લિક કરી ફોટો પાડો)</div>
+        <div id="statusMsg" style="color:#555; font-size:0.9rem; margin-top:5px;">(અહીં ક્લિક કરી ફોટો પાડો)</div>
 
         <div id="resultBox" class="result-box">
             <b style="color:green;">✅ લિંક તૈયાર છે!</b><br>
             <span style="font-size:12px;">આ લિંક કોપી કરી નીચે ફોર્મમાં Paste કરો:</span>
             
             <div style="display:flex; gap:5px; margin-top:5px;">
-                <input type="text" id="finalLink" readonly style="width:100%; padding:5px; border:1px solid #ccc; border-radius:3px;">
-                <button onclick="copyLink()" style="background:#333; color:white; border:none; padding:5px 10px; border-radius:3px;">Copy</button>
+                <input type="text" id="finalLink" readonly style="width:100%; padding:8px; border:1px solid #ccc; border-radius:3px; background:#f9f9f9;">
+                <button onclick="copyLink()" style="background:#333; color:white; border:none; padding:8px 15px; border-radius:3px; cursor:pointer;">Copy</button>
             </div>
         </div>
     </div>
 
-    <div style="background:#eee; padding:10px; text-align:center; font-weight:bold; border-bottom:1px solid #ccc;">
-        Step 2: વિગત ભરો & Submit કરો
+    <div style="background:#eee; padding:10px; border-bottom:1px solid #ccc;">
+        <div style="text-align:center; font-weight:bold; margin-bottom:10px; color:#333;">Step 2: વિગત ભરો & Submit કરો</div>
+        
+        <button onclick="openFormDirectly()" class="fallback-btn">
+            ⚠️ ફોર્મ નથી દેખાતું? અહીં ક્લિક કરો
+        </button>
     </div>
-    <iframe id="adminFrame" src=""></iframe>
+    
+    <iframe id="adminFrame" src="" style="width:100%; height:60vh; border:none; background:white;"></iframe>
 </div>
 
 <div id="cartModal" class="modal cart-modal">
@@ -225,26 +245,31 @@
         <span class="modal-title">તમારું કાર્ટ</span>
         <button class="close-btn" onclick="toggleCart()">×</button>
     </div>
-    <div id="cartList" style="padding:15px; max-height: 50vh; overflow-y:auto;"></div>
-    <div style="padding:15px; border-top:1px solid #ddd; background:#f9f9f9;">
-        <div style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:bold;">
-            <span>કુલ રકમ:</span>
-            <span id="totalAmt">₹0</span>
+    
+    <div id="cartList" style="padding:15px; max-height: 50vh; overflow-y:auto;">
         </div>
-        <button class="whatsapp-btn" onclick="checkout()">📱 WhatsApp ઓર્ડર કરો</button>
+    
+    <div style="padding:15px; border-top:1px solid #ddd; background:#f9f9f9;">
+        <div style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:bold; margin-bottom:10px;">
+            <span>કુલ રકમ:</span>
+            <span id="totalAmt" style="color:var(--primary);">₹0</span>
+        </div>
+        <button class="whatsapp-btn" onclick="checkout()">
+            📱 WhatsApp ઓર્ડર કરો
+        </button>
     </div>
 </div>
 
 <script>
     // ***************************************************************
-    // SETTINGS (આ ૩ વસ્તુ બરાબર નાખવી ફરજિયાત છે)
+    // SETTINGS (આ ૩ લિંક નીચે ધ્યાનથી મૂકો)
     // ***************************************************************
 
     // 1. Google Sheet Link (File > Share > Publish to Web > CSV)
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSQzwDTQiE0sJ-Ex4L_B3xHyP07a1GmrhyBpN_qU2wKR5Xat8UYrq8_faWPWlH-qDEwpfCUW-D8vLRB/pub?output=csv";
 
     // 2. Google Form Link (Send બટન વાળી Link)
-    const FORM_URL = "https://docs.google.com/forms/d/15PBpEvf78mfay68TyZT5zzZhXb1iscT3fx5vn1HR1cc/edit#responses";
+    const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeAWViGfoHcjgt0-WZXMrBKc_OYBOPvByArsNRyMGweanb7yA/viewform?usp=publish-editor";
 
     // 3. ImgBB API Key (https://api.imgbb.com/ પરથી મેળવેલી)
     const API_KEY = "245def2987b781c5a65854cd82809f9c";
@@ -254,12 +279,13 @@
     let products = [];
     let cart = {};
 
-    // --- 1. Load Products from Sheet ---
+    // --- 1. પ્રોડક્ટ્સ લોડ કરો ---
     async function loadProducts() {
-        // જો લિંક નાખવાની બાકી હોય તો Demo ડેટા બતાવશે
+        // જો લિંક ન મૂકી હોય તો ડેમો ડેટા
         if(SHEET_URL.includes("તમારી_GOOGLE_SHEET")) {
+            console.log("Using Demo Data");
             products = [
-                {id:1, name:"Demo Necklace (Settings બાકી છે)", price:500, image:"https://via.placeholder.com/150"},
+                {id:1, name:"Demo Necklace (Link બાકી છે)", price:500, image:"https://via.placeholder.com/150"},
                 {id:2, name:"Demo Earrings", price:200, image:"https://via.placeholder.com/150"}
             ];
             render(); 
@@ -275,14 +301,13 @@
             render();
         } catch (err) {
             console.error(err);
-            document.getElementById('loader').innerText = "ડેટા લોડ કરવામાં ભૂલ! ઇન્ટરનેટ ચેક કરો.";
+            document.getElementById('loader').innerHTML = "<br>ડેટા લોડ કરવામાં ભૂલ!<br><small>લિંક બરાબર છે કે નહિ તે ચેક કરો.</small>";
         }
     }
 
     function csvToJson(csv) {
         const lines = csv.split('\n');
         const result = [];
-        // Loop from 1 to skip header
         for(let i=1; i<lines.length; i++) {
             if(!lines[i].trim()) continue;
             const row = lines[i].split(',');
@@ -290,14 +315,14 @@
             // Sheet Columns: Timestamp[0], Name[1], Price[2], Category[3], Image[4]
             const obj = {
                 id: i,
-                name: row[1]?.trim().replace(/"/g, ''), // Remove extra quotes
+                name: row[1]?.trim().replace(/"/g, ''), 
                 price: parseInt(row[2]?.trim()) || 0,
                 category: row[3]?.trim(),
                 image: row[4]?.trim() || "https://via.placeholder.com/150?text=No+Image"
             };
             if(obj.name) result.push(obj);
         }
-        return result.reverse(); // Newest first
+        return result.reverse(); // નવી વસ્તુ ઉપર
     }
 
     function render() {
@@ -316,11 +341,10 @@
         });
     }
 
-    // --- 2. Admin & Upload Logic (Fix for Mobile) ---
+    // --- 2. એડમિન અને અપલોડ લોજીક ---
     function openAdmin() {
-        // Check links
         if(FORM_URL.includes("તમારી_GOOGLE_FORM")) {
-            alert("ભૂલ: કોડમાં Google Form ની લિંક મૂકવાની બાકી છે!");
+            alert("કોડમાં Google Form ની લિંક મૂકવાની બાકી છે!");
             return;
         }
         document.getElementById('adminFrame').src = FORM_URL;
@@ -329,7 +353,11 @@
 
     function closeAdmin() {
         document.getElementById('adminModal').style.display = 'none';
-        location.reload(); // Refresh to show new items
+        location.reload(); // રિફ્રેશ કરો જેથી નવી વસ્તુ દેખાય
+    }
+
+    function openFormDirectly() {
+        window.open(FORM_URL, '_blank');
     }
 
     function uploadImage() {
@@ -337,14 +365,13 @@
         const status = document.getElementById('statusMsg');
         const resultBox = document.getElementById('resultBox');
 
-        // Check API Key
         if(!API_KEY || API_KEY.includes("તમારી_IMGBB")) {
-            alert("ભૂલ: API Key કોડમાં નાખવાની બાકી છે!");
+            alert("API Key કોડમાં નાખવાની બાકી છે!");
             return;
         }
 
         if (input.files && input.files[0]) {
-            status.innerText = "અપલોડ થઈ રહ્યું છે... કૃપા કરીને રાહ જુઓ...";
+            status.innerText = "અપલોડ થઈ રહ્યું છે... રાહ જુઓ...";
             status.style.color = "blue";
             resultBox.style.display = 'none';
 
@@ -360,24 +387,24 @@
                 if (data && data.success) {
                     const link = data.data.url;
                     
-                    // Show Link
                     status.innerText = "";
                     resultBox.style.display = 'block';
                     document.getElementById('finalLink').value = link;
 
-                    // Auto Copy Try
+                    // ઓટોમેટિક કોપી ટ્રાય કરો
                     try { navigator.clipboard.writeText(link); } catch(e){}
 
                 } else {
                     status.innerText = "Error: " + (data.error ? data.error.message : "Upload Failed");
                     status.style.color = "red";
+                    alert("Upload Failed: " + (data.error ? data.error.message : "Unknown Error"));
                 }
             })
             .catch(error => {
                 console.error(error);
-                status.innerText = "Network Error. કૃપા કરીને GitHub પર ચેક કરો.";
+                status.innerText = "Network Error.";
                 status.style.color = "red";
-                alert("નોંધ: આ ફીચર ફક્ત ઓનલાઇન (GitHub Pages) પર જ કામ કરશે.");
+                alert("ઇન્ટરનેટ કનેક્શન નથી અથવા API Key ખોટી છે.");
             });
         }
     }
@@ -385,16 +412,18 @@
     function copyLink() {
         const copyText = document.getElementById("finalLink");
         copyText.select();
-        copyText.setSelectionRange(0, 99999); // Mobile fix
+        copyText.setSelectionRange(0, 99999); 
         document.execCommand("copy");
-        alert("લિંક કોપી થઈ ગઈ! હવે નીચે ફોર્મમાં 'Image Link' વાળા ખાનામાં Paste કરો.");
+        alert("લિંક કોપી થઈ ગઈ! હવે ફોર્મમાં Paste કરો.");
     }
 
-    // --- 3. Cart Functions ---
+    // --- 3. કાર્ટ સિસ્ટમ ---
     function addToCart(id) {
         if(cart[id]) cart[id].qty++;
         else cart[id] = { ...products.find(p => p.id === id), qty: 1 };
         updateCart();
+        // નાનું વાઈબ્રેશન
+        if(navigator.vibrate) navigator.vibrate(50);
     }
 
     function updateCart() {
@@ -416,7 +445,7 @@
         });
 
         document.getElementById('count').innerText = count;
-        document.getElementById('cartList').innerHTML = html || "<p style='text-align:center'>Cart is empty</p>";
+        document.getElementById('cartList').innerHTML = html || "<p style='text-align:center; color:#777; margin-top:20px;'>તમારું કાર્ટ ખાલી છે.</p>";
         document.getElementById('totalAmt').innerText = '₹' + total;
     }
 
@@ -428,7 +457,7 @@
     function checkout() {
         if(Object.keys(cart).length === 0) { alert("કાર્ટ ખાલી છે!"); return; }
         
-        let msg = "નમસ્તે, હું નીચે મુજબનો ઓર્ડર કરવા માંગુ છું:%0A%0A";
+        let msg = "નમસ્તે, મારે નીચે મુજબનો ઓર્ડર કરવો છે:%0A%0A";
         let total = 0;
         Object.values(cart).forEach(item => {
             msg += `- ${item.name} (Qty: ${item.qty}) = ₹${item.price * item.qty}%0A`;
@@ -436,12 +465,12 @@
         });
         msg += `%0A*કુલ રકમ: ₹${total}*`;
 
-        // તમારો નંબર અહીં લખો (91 પછી)
+        // તમારો મોબાઈલ નંબર અહીં લખો (91 પછી)
         const myNumber = "919999999999"; 
         window.open(`https://wa.me/${myNumber}?text=${msg}`, '_blank');
     }
 
-    // Start App
+    // એપ ચાલુ કરો
     loadProducts();
 
 </script>
