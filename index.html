@@ -76,6 +76,8 @@
             object-fit: cover;
             border-bottom: 1px solid var(--primary);
             background-color: #333;
+            /* સ્મૂધ લોડિંગ માટે */
+            transition: opacity 0.3s; 
         }
 
         .info { padding: 10px; text-align: center; }
@@ -305,7 +307,7 @@
         if(SHEET_URL.includes("તમારી_GOOGLE_SHEET")) {
             console.log("Using Demo Data");
             products = [
-                {id:1, name:"Demo Necklace (Settings બાકી છે)", price:500, image:"https://via.placeholder.com/150"},
+                {id:1, name:"Demo Necklace", price:500, image:"https://via.placeholder.com/150"},
                 {id:2, name:"Demo Earrings", price:200, image:"https://via.placeholder.com/150"}
             ];
             render(); 
@@ -331,7 +333,7 @@
         for(let i=1; i<lines.length; i++) {
             if(!lines[i].trim()) continue;
             const row = lines[i].split(',');
-            // Sheet Columns: Timestamp[0], Name[1], Price[2], Category[3], Image[4]
+            
             const obj = {
                 id: i,
                 name: row[1]?.trim().replace(/"/g, ''), 
@@ -350,7 +352,7 @@
         products.forEach(p => {
             grid.innerHTML += `
                 <div class="card">
-                    <img src="${p.image}" onerror="this.src='https://via.placeholder.com/150?text=Error'">
+                    <img src="${p.image}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/150?text=Error'">
                     <div class="info">
                         <div class="p-name">${p.name}</div>
                         <div class="p-price">₹${p.price}</div>
@@ -360,7 +362,7 @@
         });
     }
 
-    // --- 2. એડમિન અને અપલોડ લોજીક (ડિબગ મોડ) ---
+    // --- 2. એડમિન અને અપલોડ લોજીક ---
     function openAdmin() {
         if(FORM_URL.includes("તમારી_GOOGLE_FORM")) {
             alert("કોડમાં Google Form ની લિંક મૂકવાની બાકી છે!");
