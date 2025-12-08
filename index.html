@@ -216,7 +216,7 @@
             <input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none;" onchange="uploadImage()">
         </label>
         
-        <div id="statusMsg" style="color:#555; font-size:0.9rem; margin-top:5px;">(અહીં ક્લિક કરી ફોટો પાડો)</div>
+        <div id="statusMsg" style="color:#555; font-size:0.9rem; margin-top:5px; font-weight:bold;">(અહીં ક્લિક કરી ફોટો પાડો)</div>
 
         <div id="resultBox" class="result-box">
             <b style="color:green;">✅ લિંક તૈયાર છે!</b><br>
@@ -272,7 +272,7 @@
     const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeAWViGfoHcjgt0-WZXMrBKc_OYBOPvByArsNRyMGweanb7yA/viewform?usp=publish-editor";
 
     // 3. ImgBB API Key (https://api.imgbb.com/ પરથી મેળવેલી)
-    const API_KEY = "245def2987b781c5a65854cd82809f9c";
+    const API_KEY = "10be60cca44c9880b1580b75685496a0";
 
     // ***************************************************************
 
@@ -281,11 +281,10 @@
 
     // --- 1. પ્રોડક્ટ્સ લોડ કરો ---
     async function loadProducts() {
-        // જો લિંક ન મૂકી હોય તો ડેમો ડેટા
         if(SHEET_URL.includes("તમારી_GOOGLE_SHEET")) {
             console.log("Using Demo Data");
             products = [
-                {id:1, name:"Demo Necklace (Link બાકી છે)", price:500, image:"https://via.placeholder.com/150"},
+                {id:1, name:"Demo Necklace", price:500, image:"https://via.placeholder.com/150"},
                 {id:2, name:"Demo Earrings", price:200, image:"https://via.placeholder.com/150"}
             ];
             render(); 
@@ -301,7 +300,7 @@
             render();
         } catch (err) {
             console.error(err);
-            document.getElementById('loader').innerHTML = "<br>ડેટા લોડ કરવામાં ભૂલ!<br><small>લિંક બરાબર છે કે નહિ તે ચેક કરો.</small>";
+            document.getElementById('loader').innerHTML = "<br>ડેટા લોડ કરવામાં ભૂલ!<br><small>નેટવર્ક એરર અથવા લિંક ખોટી છે.</small>";
         }
     }
 
@@ -311,7 +310,6 @@
         for(let i=1; i<lines.length; i++) {
             if(!lines[i].trim()) continue;
             const row = lines[i].split(',');
-            
             // Sheet Columns: Timestamp[0], Name[1], Price[2], Category[3], Image[4]
             const obj = {
                 id: i,
@@ -322,7 +320,7 @@
             };
             if(obj.name) result.push(obj);
         }
-        return result.reverse(); // નવી વસ્તુ ઉપર
+        return result.reverse(); 
     }
 
     function render() {
@@ -341,7 +339,7 @@
         });
     }
 
-    // --- 2. એડમિન અને અપલોડ લોજીક ---
+    // --- 2. એડમિન અને અપલોડ લોજીક (ડિબગ મોડ) ---
     function openAdmin() {
         if(FORM_URL.includes("તમારી_GOOGLE_FORM")) {
             alert("કોડમાં Google Form ની લિંક મૂકવાની બાકી છે!");
@@ -353,36 +351,52 @@
 
     function closeAdmin() {
         document.getElementById('adminModal').style.display = 'none';
-        location.reload(); // રિફ્રેશ કરો જેથી નવી વસ્તુ દેખાય
+        location.reload(); 
     }
 
     function openFormDirectly() {
         window.open(FORM_URL, '_blank');
     }
 
+    // સુધારેલું અપલોડ ફંક્શન
     function uploadImage() {
         const input = document.getElementById('fileInput');
         const status = document.getElementById('statusMsg');
         const resultBox = document.getElementById('resultBox');
 
-        if(!API_KEY || API_KEY.includes("તમારી_IMGBB")) {
-            alert("API Key કોડમાં નાખવાની બાકી છે!");
+        // ૧. કી ચેક કરો
+        if(!API_KEY || API_KEY.length < 10 || API_KEY.includes("તમારી_IMGBB")) {
+            alert("API Key કોડમાં નાખવાની બાકી છે! કૃપા કરીને કોડ ચેક કરો.");
             return;
         }
 
         if (input.files && input.files[0]) {
-            status.innerText = "અપલોડ થઈ રહ્યું છે... રાહ જુઓ...";
+            const file = input.files[0];
+
+            // ૨. સાઈઝ ચેક કરો
+            if(file.size > 10 * 1024 * 1024) {
+                alert("ફાઈલ બહુ મોટી છે! નાનો ફોટો પસંદ કરો.");
+                return;
+            }
+
+            status.innerText = "કનેક્ટ થઈ રહ્યું છે... રાહ જુઓ...";
             status.style.color = "blue";
             resultBox.style.display = 'none';
 
             let formData = new FormData();
-            formData.append("image", input.files[0]);
+            formData.append("image", file);
+
+            // યુઝરને જાણ કરો
+            alert("અપલોડ શરૂ થાય છે... 'OK' દબાવો.");
 
             fetch('https://api.imgbb.com/1/upload?key=' + API_KEY, {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
+            .then(response => {
+                status.innerText = "સર્વર મળ્યું... પ્રોસેસ ચાલુ છે...";
+                return response.json();
+            })
             .then(data => {
                 if (data && data.success) {
                     const link = data.data.url;
@@ -390,14 +404,13 @@
                     status.innerText = "";
                     resultBox.style.display = 'block';
                     document.getElementById('finalLink').value = link;
-
-                    // ઓટોમેટિક કોપી ટ્રાય કરો
-                    try { navigator.clipboard.writeText(link); } catch(e){}
-
+                    
+                    alert("✅ સફળ! લિંક તૈયાર છે.");
                 } else {
-                    status.innerText = "Error: " + (data.error ? data.error.message : "Upload Failed");
+                    const err = data.error ? data.error.message : "Upload Failed";
+                    alert("ભૂલ આવી: " + err);
+                    status.innerText = "Error: " + err;
                     status.style.color = "red";
-                    alert("Upload Failed: " + (data.error ? data.error.message : "Unknown Error"));
                 }
             })
             .catch(error => {
@@ -422,7 +435,6 @@
         if(cart[id]) cart[id].qty++;
         else cart[id] = { ...products.find(p => p.id === id), qty: 1 };
         updateCart();
-        // નાનું વાઈબ્રેશન
         if(navigator.vibrate) navigator.vibrate(50);
     }
 
@@ -465,7 +477,6 @@
         });
         msg += `%0A*કુલ રકમ: ₹${total}*`;
 
-        // તમારો મોબાઈલ નંબર અહીં લખો (91 પછી)
         const myNumber = "919999999999"; 
         window.open(`https://wa.me/${myNumber}?text=${msg}`, '_blank');
     }
