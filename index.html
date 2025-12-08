@@ -16,10 +16,13 @@
 
         body {
             margin: 0;
-            padding-bottom: 100px; /* ફૂટર માટે જગ્યા */
+            padding-bottom: 80px; /* ફૂટર માટે જગ્યા */
             background-color: var(--dark);
             color: var(--light);
             font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         /* --- હેડર --- */
@@ -53,6 +56,7 @@
             grid-template-columns: 1fr 1fr; /* મોબાઈલમાં બે કોલમ */
             gap: 15px;
             padding: 15px;
+            flex: 1; 
         }
 
         .card {
@@ -93,7 +97,7 @@
         /* --- એડમિન બટન (+) --- */
         .admin-btn {
             position: fixed;
-            bottom: 80px;
+            bottom: 100px;
             right: 20px;
             background: #000;
             color: var(--primary);
@@ -109,6 +113,18 @@
             box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4);
             z-index: 90;
         }
+
+        /* --- ક્રેડિટ ફૂટર --- */
+        .app-footer {
+            text-align: center;
+            padding: 20px;
+            background: #000;
+            color: #777;
+            font-size: 0.8rem;
+            border-top: 1px solid #333;
+            margin-top: auto;
+        }
+        .app-footer a { color: var(--primary); text-decoration: none; }
 
         /* --- મોડલ (Popup Box) --- */
         .modal {
@@ -200,6 +216,11 @@
 <div id="loader" class="loader">Loading Jewellery...</div>
 <div class="grid" id="grid"></div>
 
+<footer class="app-footer">
+    Developed by - Devendra Ramanuj <br> 
+    <a href="tel:9276505035">📞 9276505035</a>
+</footer>
+
 <div class="admin-btn" onclick="openAdmin()" title="Add New Item">+</div>
 
 <div id="adminModal" class="modal">
@@ -212,11 +233,11 @@
         <h3 style="margin:0 0 10px 0; color:#1565c0;">Step 1: ફોટો પાડો</h3>
         
         <label class="camera-label">
-            📷 કેમેરા ચાલુ કરો
-            <input type="file" id="fileInput" accept="image/*" capture="environment" style="display:none;" onchange="uploadImage()">
+            📷 ફોટો પાડો / ગેલેરી પસંદ કરો
+            <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="uploadImage()">
         </label>
         
-        <div id="statusMsg" style="color:#555; font-size:0.9rem; margin-top:5px; font-weight:bold;">(અહીં ક્લિક કરી ફોટો પાડો)</div>
+        <div id="statusMsg" style="color:#555; font-size:0.9rem; margin-top:5px; font-weight:bold;">(અહીં ક્લિક કરો)</div>
 
         <div id="resultBox" class="result-box">
             <b style="color:green;">✅ લિંક તૈયાર છે!</b><br>
@@ -284,7 +305,7 @@
         if(SHEET_URL.includes("તમારી_GOOGLE_SHEET")) {
             console.log("Using Demo Data");
             products = [
-                {id:1, name:"Demo Necklace", price:500, image:"https://via.placeholder.com/150"},
+                {id:1, name:"Demo Necklace (Settings બાકી છે)", price:500, image:"https://via.placeholder.com/150"},
                 {id:2, name:"Demo Earrings", price:200, image:"https://via.placeholder.com/150"}
             ];
             render(); 
