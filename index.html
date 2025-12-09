@@ -3,354 +3,494 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Beauty Jewellery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>વિદુષી Real Live</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* --- થીમ અને સ્ટાઇલ --- */
-        :root { --primary: #c5a059; --dark: #121212; --light: #ffffff; --gray: #333333; }
-        body { margin: 0; padding-bottom: 80px; background-color: var(--dark); color: var(--light); font-family: 'Poppins', sans-serif; display: flex; flex-direction: column; min-height: 100vh; }
+        :root {
+            --primary-color: #ff0055; /* વિદુષીનો મુખ્ય કલર */
+            --bg-dark: #000000;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+        body {
+            background-color: var(--bg-dark);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; /* સ્ક્રોલ બંધ */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end; /* કંટ્રોલ્સ નીચે રહે */
+        }
+
+        /* --- VIDEO BACKGROUND --- */
+        #videoContainer {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            background: #111; /* વિડીયો ન હોય તો કાળું બેકગ્રાઉન્ડ */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        video {
+            width: 100%; height: 100%;
+            object-fit: cover; /* આખી સ્ક્રીનમાં ફિટ */
+            opacity: 0.9;
+            transition: transform 0.3s ease;
+        }
+
+        /* બોલતી વખતે ઝૂમ ઇફેક્ટ */
+        video.speaking { transform: scale(1.03); filter: brightness(1.1); }
+        video.listening { filter: grayscale(0.2); opacity: 0.8; }
+
+        /* --- UI LAYER --- */
+        #uiLayer {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 5;
+            pointer-events: none; /* વિડીયો પર ક્લિક થઈ શકે */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Header */
+        .header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            pointer-events: auto;
+        }
+        .header h1 { color: rgba(255,255,255,0.7); font-size: 1.2rem; font-weight: normal; }
+        .settings-btn { background: none; border: none; color: white; font-size: 1.4rem; cursor: pointer; }
+
+        /* Chat Messages */
+        #chatArea {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            padding-bottom: 120px; /* કંટ્રોલ્સ માટે જગ્યા */
+            gap: 10px;
+            overflow-y: auto;
+            mask-image: linear-gradient(to top, black 70%, transparent 100%);
+        }
+
+        .bubble {
+            max-width: 85%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            font-size: 1rem;
+            line-height: 1.4;
+            backdrop-filter: blur(8px);
+            animation: popIn 0.3s ease;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .bubble.user {
+            align-self: flex-end;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+            border-right: 3px solid #00ffff;
+        }
+
+        .bubble.ai {
+            align-self: flex-start;
+            background: rgba(255, 0, 85, 0.15); /* લાલ છાંયો */
+            color: #fff;
+            border-bottom-left-radius: 4px;
+            border-left: 3px solid var(--primary-color);
+            border: 1px solid rgba(255, 0, 85, 0.3);
+        }
+
+        /* --- CONTROLS --- */
+        .controls-container {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%;
+            padding: 20px;
+            padding-bottom: 40px;
+            background: linear-gradient(to top, rgba(0,0,0,1) 10%, transparent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        .btn {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: white;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .btn:active { transform: scale(0.9); }
+
+        #micBtn {
+            width: 75px; height: 75px;
+            font-size: 1.8rem;
+            background: var(--primary-color);
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+            border: none;
+        }
         
-        /* હેડર */
-        header { background: #000; padding: 15px 20px; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--primary); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        header h1 { margin: 0; font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.3rem; letter-spacing: 1px; }
-        .cart-icon { font-size: 1.5rem; position: relative; cursor: pointer; }
-        .cart-count { position: absolute; top: -5px; right: -8px; background: #d32f2f; color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; font-weight: bold;}
+        #micBtn.listening {
+            background: white; color: var(--primary-color);
+            animation: pulse 1.5s infinite;
+        }
 
-        /* ગ્રીડ અને કાર્ડ */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; flex: 1; }
-        .card { background: #1e1e1e; border: 1px solid var(--gray); border-radius: 10px; overflow: hidden; transition: transform 0.2s; position: relative; }
-        .card:active { transform: scale(0.98); }
-        .card img { width: 100%; height: 160px; object-fit: cover; border-bottom: 1px solid var(--primary); background-color: #333; transition: opacity 0.3s; }
-        .info { padding: 10px; text-align: center; }
-        .p-name { font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; color: #eee;}
-        .p-price { color: var(--primary); font-weight: bold; font-size: 1.1rem; }
-        .add-btn { background: var(--primary); color: black; border: none; width: 100%; padding: 8px; margin-top: 8px; font-weight: bold; border-radius: 5px; cursor: pointer; }
+        /* --- SETTINGS PANEL --- */
+        #settingsPanel {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #121212;
+            z-index: 20;
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+        }
 
-        /* એડમિન અને ફૂટર */
-        .admin-btn { position: fixed; bottom: 100px; right: 20px; background: #000; color: var(--primary); border: 2px solid var(--primary); width: 60px; height: 60px; border-radius: 50%; font-size: 32px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4); z-index: 90; }
-        .app-footer { text-align: center; padding: 20px; background: #000; color: #777; font-size: 0.8rem; border-top: 1px solid #333; margin-top: auto; }
-        .app-footer a { color: var(--primary); text-decoration: none; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; color: #888; margin-bottom: 8px; font-size: 0.9rem; }
+        .input-group input, .input-group select {
+            width: 100%; padding: 12px;
+            background: #222; border: 1px solid #333;
+            color: white; border-radius: 8px; font-size: 1rem;
+        }
 
-        /* મોડલ અને અપલોડ */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; color: #000; z-index: 200; overflow-y: auto; }
-        .modal-header { padding: 15px; background: #f4f4f4; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; }
-        .modal-title { font-weight: bold; font-size: 1.1rem; }
-        .close-btn { font-size: 2rem; border: none; background: none; cursor: pointer; color: #555; }
-        .upload-section { background: #e3f2fd; padding: 20px; text-align: center; border-bottom: 2px solid #2196f3; }
-        .camera-label { display: inline-block; background: #2196f3; color: white; padding: 12px 25px; border-radius: 30px; font-weight: bold; cursor: pointer; margin-bottom: 10px; font-size: 1rem; }
-        .result-box { display: none; margin-top: 15px; background: white; padding: 10px; border: 1px solid green; border-radius: 5px; }
-        
-        /* કાર્ટ અને ફોર્મ */
-        .cart-modal { top: unset; bottom: 0; height: auto; max-height: 90vh; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 50px rgba(0,0,0,0.5); }
-        .whatsapp-btn { background: #25D366; color: white; width: 100%; padding: 12px; font-weight: bold; border: none; border-radius: 8px; margin-top: 10px; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px;}
-        .cust-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; box-sizing: border-box; }
-        .loader { text-align: center; margin-top: 50px; color: var(--primary); font-size: 1.2rem; }
-        .fallback-btn { width: 100%; background: white; color: #d32f2f; border: 1px solid #d32f2f; padding: 10px; border-radius: 5px; font-size: 0.9rem; cursor: pointer; margin-bottom: 5px; font-weight: bold; }
+        .save-btn {
+            background: var(--primary-color); color: white;
+            border: none; padding: 15px; border-radius: 8px;
+            font-size: 1rem; font-weight: bold; cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Animations */
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); } 70% { box-shadow: 0 0 0 20px rgba(255, 255, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+        @keyframes popIn { from { opacity: 0; transform: translateY(10px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
     </style>
 </head>
 <body>
 
-<header>
-    <h1>✨ Royal Jewellery</h1>
-    <div class="cart-icon" onclick="toggleCart()">
-        🛍️ <span class="cart-count" id="count">0</span>
-    </div>
-</header>
-
-<div id="loader" class="loader">Loading Jewellery...</div>
-<div class="grid" id="grid"></div>
-
-<footer class="app-footer">
-    Developed by - Devendra Ramanuj <br> 
-    <a href="tel:9276505035">📞 9276505035</a>
-</footer>
-
-<div class="admin-btn" onclick="openAdmin()" title="Admin Login">+</div>
-
-<div id="adminModal" class="modal">
-    <div class="modal-header">
-        <span class="modal-title">નવી વસ્તુ ઉમેરો</span>
-        <button class="close-btn" onclick="closeAdmin()">×</button>
+    <div id="videoContainer">
+        <video id="vidushiVideo" loop muted playsinline poster="https://via.placeholder.com/400x800/111/fff?text=Vidushi+Loading...">
+            <source src="vidushi.mp4" type="video/mp4">
+            તમારું બ્રાઉઝર વિડીયો પ્લે કરી શકતું નથી.
+        </video>
     </div>
 
-    <div class="upload-section">
-        <h3 style="margin:0 0 10px 0; color:#1565c0;">Step 1: ફોટો પાડો</h3>
-        <label class="camera-label">
-            📷 ફોટો પાડો / ગેલેરી પસંદ કરો
-            <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="uploadImage()">
-        </label>
-        <div id="statusMsg" style="color:#555; font-size:0.9rem; margin-top:5px; font-weight:bold;">(અહીં ક્લિક કરો)</div>
+    <div id="uiLayer">
+        <div class="header">
+            <h1>Vidushi AI (Live)</h1>
+            <button class="settings-btn" onclick="openSettings()"><i class="fas fa-cog"></i></button>
+        </div>
 
-        <div id="resultBox" class="result-box">
-            <b style="color:green;">✅ લિંક તૈયાર છે!</b><br>
-            <span style="font-size:12px;">આ લિંક કોપી કરી નીચે ફોર્મમાં Paste કરો:</span>
-            <div style="display:flex; gap:5px; margin-top:5px;">
-                <input type="text" id="finalLink" readonly style="width:100%; padding:8px; border:1px solid #ccc; border-radius:3px; background:#f9f9f9;">
-                <button onclick="copyLink()" style="background:#333; color:white; border:none; padding:8px 15px; border-radius:3px; cursor:pointer;">Copy</button>
+        <div id="chatArea">
             </div>
+    </div>
+
+    <div class="controls-container">
+        <button class="btn" onclick="clearChat()"><i class="fas fa-eraser"></i></button>
+        <button class="btn" id="micBtn" onclick="toggleMic()"><i class="fas fa-microphone"></i></button>
+        <button class="btn" onclick="stopEverything()"><i class="fas fa-stop"></i></button>
+    </div>
+
+    <div id="settingsPanel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+            <h2 style="color:white;">Settings</h2>
+            <button onclick="closeSettings()" style="background:none; border:none; color:white; font-size:1.5rem;"><i class="fas fa-times"></i></button>
         </div>
-    </div>
 
-    <div style="background:#eee; padding:10px; border-bottom:1px solid #ccc;">
-        <div style="text-align:center; font-weight:bold; margin-bottom:10px; color:#333;">Step 2: વિગત ભરો & Submit કરો</div>
-        <button onclick="openFormDirectly()" class="fallback-btn">⚠️ ફોર્મ નથી દેખાતું? અહીં ક્લિક કરો</button>
-    </div>
-    <iframe id="adminFrame" src="" style="width:100%; height:60vh; border:none; background:white;"></iframe>
-</div>
-
-<div id="cartModal" class="modal cart-modal">
-    <div class="modal-header">
-        <span class="modal-title">તમારું કાર્ટ</span>
-        <button class="close-btn" onclick="toggleCart()">×</button>
-    </div>
-    
-    <div id="cartList" style="padding:15px; max-height: 40vh; overflow-y:auto;"></div>
-    
-    <div style="padding:15px; background:#fff; border-top:1px solid #eee;">
-        <h4 style="margin:0 0 10px 0; color:#333;">ગ્રાહકની વિગત:</h4>
-        <input type="text" id="custName" class="cust-input" placeholder="તમારું નામ (Name)">
-        <input type="tel" id="custMobile" class="cust-input" placeholder="મોબાઈલ નંબર (Mobile No.)">
-    </div>
-
-    <div style="padding:15px; border-top:1px solid #ddd; background:#f9f9f9;">
-        <div style="display:flex; justify-content:space-between; font-size:1.2rem; font-weight:bold; margin-bottom:10px;">
-            <span>કુલ રકમ:</span>
-            <span id="totalAmt" style="color:var(--primary);">₹0</span>
+        <div class="input-group">
+            <label><i class="fas fa-key"></i> Gemini API Key</label>
+            <input type="password" id="apiKeyInput" placeholder="અહીં Key પેસ્ટ કરો...">
         </div>
-        <button class="whatsapp-btn" onclick="checkout()">
-            📱 WhatsApp ઓર્ડર કરો
+
+        <div class="input-group">
+            <label><i class="fas fa-brain"></i> AI Model</label>
+            <select id="modelSelect">
+                <option value="gemini-1.5-flash">Gemini 1.5 Flash (Recommended)</option>
+                <option value="gemini-1.5-pro">Gemini 1.5 Pro (Powerful)</option>
+                <option value="gemini-2.5-flash">Gemini 2.5 Flash (New)</option>
+            </select>
+        </div>
+        
+        <div class="input-group">
+             <label><i class="fas fa-tachometer-alt"></i> બોલવાની ઝડપ (Speed)</label>
+             <input type="range" id="rateInput" min="0.8" max="1.5" step="0.1" value="1.1">
+        </div>
+
+        <button class="save-btn" onclick="saveSettings()">Save & Close</button>
+        <p style="color:#666; font-size:0.8rem; margin-top:20px; text-align:center;">
+            નોંધ: વિડીયો ફાઈલ 'vidushi.mp4' ફોલ્ડરમાં હોવી જોઈએ.
         </button>
     </div>
-</div>
 
-<script>
-    // ***************************************************************
-    // SETTINGS (તમારી વિગતો અહીં ભરો)
-    // ***************************************************************
+    <script>
+        // --- 1. SYSTEM CONFIGURATION ---
+        const SYSTEM_INSTRUCTION = `
+            You are Vidushi, a polite and friendly Indian female assistant.
+            Speak in Gujarati.
+            Keep answers short, conversational, and natural (like a real person, not a book).
+            Do not use markdown symbols like * or #.
+            If asked how you are, say "હું મજામાં છું, આપ કેમ છો?"
+        `;
 
-    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSQzwDTQiE0sJ-Ex4L_B3xHyP07a1GmrhyBpN_qU2wKR5Xat8UYrq8_faWPWlH-qDEwpfCUW-D8vLRB/pub?output=csv";
-    const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeAWViGfoHcjgt0-WZXMrBKc_OYBOPvByArsNRyMGweanb7yA/viewform?usp=publish-editor";
-    const API_KEY = "10be60cca44c9880b1580b75685496a0";
-    const ADMIN_PIN = "1234"; // પાસવર્ડ
+        // --- 2. STATE MANAGEMENT ---
+        let state = {
+            apiKey: localStorage.getItem('vidushi_key') || '',
+            model: localStorage.getItem('vidushi_model') || 'gemini-1.5-flash',
+            rate: localStorage.getItem('vidushi_rate') || '1.1',
+            isListening: false,
+            isSpeaking: false
+        };
 
-    // ***************************************************************
+        // DOM Elements
+        const vid = document.getElementById('vidushiVideo');
+        const micBtn = document.getElementById('micBtn');
+        const chatArea = document.getElementById('chatArea');
+        const settingsPanel = document.getElementById('settingsPanel');
+        
+        // Speech API
+        const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new Recognition();
+        recognition.lang = 'gu-IN';
+        recognition.continuous = false; // One turn at a time
+        recognition.interimResults = false;
 
-    let products = [];
-    
-    // --- 1. Cart Initialization (With Auto-Save) ---
-    // પેજ લોડ થાય ત્યારે મેમરીમાંથી કાર્ટ લોડ કરો
-    let cart = JSON.parse(localStorage.getItem('myJewelleryCart')) || {};
+        const synth = window.speechSynthesis;
+        let voices = [];
 
-    // --- 2. Load Products ---
-    async function loadProducts() {
-        // પહેલા કાર્ટ અપડેટ કરી લો (જો રિફ્રેશ કર્યું હોય તો)
-        updateCart();
+        // --- 3. INITIALIZATION ---
+        window.onload = () => {
+            // Load Settings UI
+            document.getElementById('apiKeyInput').value = state.apiKey;
+            document.getElementById('modelSelect').value = state.model;
+            document.getElementById('rateInput').value = state.rate;
 
-        if(SHEET_URL.includes("તમારી_GOOGLE_SHEET")) {
-            console.log("Using Demo Data");
-            products = [
-                {id:1, name:"Demo Necklace", price:500, image:"https://via.placeholder.com/150"},
-                {id:2, name:"Demo Earrings", price:200, image:"https://via.placeholder.com/150"}
-            ];
-            render(); 
-            document.getElementById('loader').style.display = 'none';
-            return;
+            // Load Voices
+            const loadVoices = () => { voices = synth.getVoices(); };
+            if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
+            setTimeout(loadVoices, 500);
+
+            // Add Welcome Message
+            addBubble("જય શ્રી કૃષ્ણ! હું વિદુષી છું. સેટિંગ્સમાં Key નાખીને વાત શરૂ કરો.", 'ai');
+        };
+
+        // --- 4. VIDEO AVATAR LOGIC ---
+        function setAvatarState(status) {
+            if (!vid) return;
+            
+            // Classes for CSS animation
+            vid.className = status; 
+
+            if (status === 'speaking') {
+                vid.play().catch(e => console.log("Video Play Error:", e));
+            } else {
+                vid.pause();
+            }
         }
 
-        try {
-            const res = await fetch(SHEET_URL);
-            const text = await res.text();
-            products = csvToJson(text);
-            document.getElementById('loader').style.display = 'none';
-            render();
-        } catch (err) {
-            console.error(err);
-            document.getElementById('loader').innerHTML = "<br>Error!<br><small>લિંક ચેક કરો.</small>";
-        }
-    }
+        // --- 5. MICROPHONE LOGIC ---
+        function toggleMic() {
+            // Safety Check
+            if (!state.apiKey) {
+                openSettings();
+                alert("કૃપા કરીને પહેલા API Key નાખો.");
+                return;
+            }
 
-    function csvToJson(csv) {
-        const lines = csv.split('\n');
-        const result = [];
-        for(let i=1; i<lines.length; i++) {
-            if(!lines[i].trim()) continue;
-            const row = lines[i].split(',');
-            const obj = {
-                id: i,
-                name: row[1]?.trim().replace(/"/g, ''), 
-                price: parseInt(row[2]?.trim()) || 0,
-                category: row[3]?.trim(),
-                image: row[4]?.trim() || "https://via.placeholder.com/150?text=No+Image"
-            };
-            if(obj.name) result.push(obj);
-        }
-        return result.reverse(); 
-    }
+            if (state.isListening) {
+                recognition.stop();
+            } else {
+                // Stop any current speech
+                if (state.isSpeaking) stopEverything();
 
-    function render() {
-        const grid = document.getElementById('grid');
-        grid.innerHTML = '';
-        products.forEach(p => {
-            grid.innerHTML += `
-                <div class="card">
-                    <img src="${p.image}" loading="lazy" decoding="async" onerror="this.src='https://via.placeholder.com/150?text=Error'">
-                    <div class="info">
-                        <div class="p-name">${p.name}</div>
-                        <div class="p-price">₹${p.price}</div>
-                        <button class="add-btn" onclick="addToCart(${p.id})">ADD TO BAG</button>
-                    </div>
-                </div>`;
-        });
-    }
-
-    // --- 3. Admin Logic ---
-    function openAdmin() {
-        let pass = prompt("🔐 એડમિન પાસવર્ડ નાખો:");
-        if (pass === ADMIN_PIN) {
-            if(FORM_URL.includes("તમારી_GOOGLE_FORM")) { alert("ફોર્મની લિંક બાકી છે!"); return; }
-            document.getElementById('adminFrame').src = FORM_URL;
-            document.getElementById('adminModal').style.display = 'block';
-        } else {
-            if(pass !== null) alert("❌ ખોટો પાસવર્ડ!");
-        }
-    }
-
-    function closeAdmin() {
-        document.getElementById('adminModal').style.display = 'none';
-        location.reload(); 
-    }
-
-    function openFormDirectly() { window.open(FORM_URL, '_blank'); }
-
-    // Upload
-    function uploadImage() {
-        const input = document.getElementById('fileInput');
-        const status = document.getElementById('statusMsg');
-        const resultBox = document.getElementById('resultBox');
-
-        if(!API_KEY || API_KEY.length < 10 || API_KEY.includes("તમારી_IMGBB")) { alert("API Key બાકી છે!"); return; }
-
-        if (input.files && input.files[0]) {
-            const file = input.files[0];
-            if(file.size > 10 * 1024 * 1024) { alert("ફાઈલ મોટી છે!"); return; }
-
-            status.innerText = "અપલોડ થાય છે...";
-            status.style.color = "blue";
-            resultBox.style.display = 'none';
-
-            let formData = new FormData();
-            formData.append("image", file);
-
-            alert("અપલોડ શરૂ... OK દબાવો.");
-
-            fetch('https://api.imgbb.com/1/upload?key=' + API_KEY, { method: 'POST', body: formData })
-            .then(res => res.json())
-            .then(data => {
-                if (data && data.success) {
-                    const link = data.data.url;
-                    status.innerText = "";
-                    resultBox.style.display = 'block';
-                    document.getElementById('finalLink').value = link;
-                    alert("✅ સફળ! લિંક કોપી કરો.");
-                } else {
-                    alert("ભૂલ: " + (data.error ? data.error.message : "Error"));
+                try {
+                    recognition.start();
+                    state.isListening = true;
+                    micBtn.classList.add('listening');
+                    addBubble("સાંભળું છું...", 'ai'); // Feedback
+                    setAvatarState('listening');
+                } catch (e) {
+                    console.error(e);
+                    alert("માઈક્રોફોન શરૂ કરવામાં સમસ્યા આવી.");
                 }
-            })
-            .catch(err => { alert("ઇન્ટરનેટ એરર."); });
+            }
         }
-    }
 
-    function copyLink() {
-        const copyText = document.getElementById("finalLink");
-        copyText.select();
-        copyText.setSelectionRange(0, 99999); 
-        document.execCommand("copy");
-        alert("લિંક કોપી થઈ ગઈ!");
-    }
+        recognition.onend = () => {
+            state.isListening = false;
+            micBtn.classList.remove('listening');
+            
+            // Remove "Listening..." bubble if it's the last one
+            const last = chatArea.lastElementChild;
+            if(last && last.innerText === "સાંભળું છું...") {
+                last.remove();
+            }
 
-    // --- 4. Cart Logic (Updated with Auto-Save) ---
-    function addToCart(id) {
-        if(cart[id]) cart[id].qty++;
-        else cart[id] = { ...products.find(p => p.id === id), qty: 1 };
-        updateCart();
-        if(navigator.vibrate) navigator.vibrate(50);
-    }
+            if (!state.isSpeaking) setAvatarState('idle');
+        };
 
-    // કાર્ટમાંથી આઈટમ કાઢવા માટે (Optional - જો તમે - બટન મૂકવા માંગતા હોવ તો)
-    function removeFromCart(id) {
-        if(cart[id]) {
-            cart[id].qty--;
-            if(cart[id].qty === 0) delete cart[id];
+        recognition.onresult = async (event) => {
+            const transcript = event.results[0][0].transcript;
+            addBubble(transcript, 'user');
+            await getGeminiResponse(transcript);
+        };
+
+        recognition.onerror = (e) => {
+            console.error("Speech Error:", e.error);
+            state.isListening = false;
+            micBtn.classList.remove('listening');
+            addBubble("અવાજ સંભળાયો નથી, ફરી પ્રયાસ કરો.", 'ai');
+        };
+
+        // --- 6. GEMINI API LOGIC ---
+        async function getGeminiResponse(userText) {
+            // UI Feedback
+            const tempId = addBubble("વિચારું છું...", 'ai'); 
+
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/${state.model}:generateContent?key=${state.apiKey}`;
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
+                        contents: [{ parts: [{ text: userText }] }]
+                    })
+                });
+
+                const data = await response.json();
+
+                // Remove "Thinking..."
+                const tempBubble = document.getElementById(tempId);
+                if(tempBubble) tempBubble.remove();
+
+                if (!response.ok) {
+                    throw new Error(data.error?.message || "API Connect Failed");
+                }
+
+                if (data.candidates && data.candidates.length > 0) {
+                    const replyText = data.candidates[0].content.parts[0].text;
+                    addBubble(replyText, 'ai');
+                    speakText(replyText);
+                } else {
+                    throw new Error("Empty Response");
+                }
+
+            } catch (error) {
+                console.error(error);
+                // Remove thinking bubble if error
+                const tempBubble = document.getElementById(tempId);
+                if(tempBubble) tempBubble.remove();
+                
+                addBubble(`ભૂલ આવી: ${error.message}`, 'ai');
+                speakText("માફ કરશો, કનેક્શનમાં કંઈક તકલીફ છે.");
+            }
         }
-        updateCart();
-    }
 
-    function updateCart() {
-        let count = 0;
-        let total = 0;
-        let html = '';
+        // --- 7. TEXT TO SPEECH (TTS) ---
+        function speakText(text) {
+            if (synth.speaking) synth.cancel();
+
+            // Clean text
+            const clean = text.replace(/[*#_]/g, '');
+
+            const utterance = new SpeechSynthesisUtterance(clean);
+            utterance.lang = 'gu-IN';
+            utterance.rate = parseFloat(state.rate);
+
+            // Find Gujarati Voice
+            const gujVoice = voices.find(v => v.lang.includes('gu'));
+            if (gujVoice) utterance.voice = gujVoice;
+
+            utterance.onstart = () => {
+                state.isSpeaking = true;
+                setAvatarState('speaking');
+            };
+
+            utterance.onend = () => {
+                state.isSpeaking = false;
+                setAvatarState('idle');
+            };
+
+            utterance.onerror = (e) => {
+                console.error("TTS Error", e);
+                state.isSpeaking = false;
+                setAvatarState('idle');
+            };
+
+            synth.speak(utterance);
+        }
+
+        // --- 8. HELPER FUNCTIONS ---
+        function stopEverything() {
+            synth.cancel();
+            recognition.stop();
+            state.isListening = false;
+            state.isSpeaking = false;
+            setAvatarState('idle');
+            micBtn.classList.remove('listening');
+        }
+
+        function addBubble(text, sender) {
+            const div = document.createElement('div');
+            const id = 'msg-' + Date.now();
+            div.id = id;
+            div.className = `bubble ${sender}`;
+            div.innerText = text;
+            chatArea.appendChild(div);
+            // Auto scroll to bottom
+            chatArea.scrollTop = chatArea.scrollHeight;
+            return id;
+        }
+
+        function clearChat() {
+            chatArea.innerHTML = '';
+            addBubble("વાતચીત સાફ કરી દીધી.", 'ai');
+        }
+
+        // Settings Handlers
+        function openSettings() { settingsPanel.style.display = 'flex'; }
+        function closeSettings() { settingsPanel.style.display = 'none'; }
         
-        // 1. Save to Local Storage (Magic Line)
-        localStorage.setItem('myJewelleryCart', JSON.stringify(cart));
+        function saveSettings() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if(!key) { alert("Key લખવી જરૂરી છે!"); return; }
 
-        Object.values(cart).forEach(item => {
-            count += item.qty;
-            total += item.price * item.qty;
-            html += `
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
-                    <div>
-                        <div style="font-weight:bold;">${item.name}</div>
-                        <div style="font-size:0.9rem; color:#555;">₹${item.price} x ${item.qty}</div>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <button onclick="removeFromCart(${item.id})" style="background:#ddd; border:none; width:25px; height:25px; border-radius:50%; font-weight:bold;">-</button>
-                        <div style="font-weight:bold;">₹${item.price * item.qty}</div>
-                    </div>
-                </div>`;
-        });
-        document.getElementById('count').innerText = count;
-        document.getElementById('cartList').innerHTML = html || "<p style='text-align:center; color:#777; margin-top:20px;'>તમારું કાર્ટ ખાલી છે.</p>";
-        document.getElementById('totalAmt').innerText = '₹' + total;
-    }
+            state.apiKey = key;
+            state.model = document.getElementById('modelSelect').value;
+            state.rate = document.getElementById('rateInput').value;
 
-    function toggleCart() {
-        const m = document.getElementById('cartModal');
-        m.style.display = m.style.display === 'block' ? 'none' : 'block';
-    }
+            localStorage.setItem('vidushi_key', state.apiKey);
+            localStorage.setItem('vidushi_model', state.model);
+            localStorage.setItem('vidushi_rate', state.rate);
 
-    function checkout() {
-        if(Object.keys(cart).length === 0) { alert("કાર્ટ ખાલી છે!"); return; }
-        
-        const name = document.getElementById('custName').value;
-        const mobile = document.getElementById('custMobile').value;
-
-        if(!name || !mobile) {
-            alert("કૃપા કરીને તમારું નામ અને મોબાઈલ નંબર લખો.");
-            return;
+            closeSettings();
+            addBubble("સેટિંગ્સ સેવ થઈ ગયા! હવે વાત કરો.", 'ai');
         }
 
-        let msg = `નમસ્તે, નવો ઓર્ડર આવ્યો છે:%0A%0A👤 ગ્રાહક: *${name}*%0A📱 નંબર: *${mobile}*%0A%0A🛒 ઓર્ડર લિસ્ટ:%0A`;
-        let total = 0;
-        Object.values(cart).forEach(i => {
-            msg += `- ${i.name} (${i.qty}) = ₹${i.price * i.qty}%0A`;
-            total += i.price * i.qty;
-        });
-        msg += `%0A*કુલ રકમ: ₹${total}*`;
-
-        // ઓર્ડર થઈ જાય પછી કાર્ટ ખાલી કરો
-        cart = {};
-        localStorage.removeItem('myJewelleryCart');
-        updateCart();
-        document.getElementById('custName').value = '';
-        document.getElementById('custMobile').value = '';
-        toggleCart();
-
-        const num = "919276505035"; 
-        window.open(`https://wa.me/${num}?text=${msg}`, '_blank');
-    }
-
-    loadProducts();
-
-</script>
+    </script>
 </body>
 </html>
