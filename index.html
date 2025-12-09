@@ -6,173 +6,44 @@
     <title>Royal Beauty Jewellery</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* --- થીમ અને કલર --- */
-        :root {
-            --primary: #c5a059; /* ગોલ્ડ કલર */
-            --dark: #121212;    /* બ્લેક */
-            --light: #ffffff;
-            --gray: #333333;
-        }
-
-        body {
-            margin: 0;
-            padding-bottom: 80px;
-            background-color: var(--dark);
-            color: var(--light);
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* --- હેડર --- */
-        header {
-            background: #000;
-            padding: 15px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 2px solid var(--primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-
-        header h1 {
-            margin: 0;
-            font-family: 'Playfair Display', serif;
-            color: var(--primary);
-            font-size: 1.3rem;
-            letter-spacing: 1px;
-        }
-
+        /* --- થીમ અને સ્ટાઇલ --- */
+        :root { --primary: #c5a059; --dark: #121212; --light: #ffffff; --gray: #333333; }
+        body { margin: 0; padding-bottom: 80px; background-color: var(--dark); color: var(--light); font-family: 'Poppins', sans-serif; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* હેડર */
+        header { background: #000; padding: 15px 20px; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--primary); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        header h1 { margin: 0; font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.3rem; letter-spacing: 1px; }
         .cart-icon { font-size: 1.5rem; position: relative; cursor: pointer; }
         .cart-count { position: absolute; top: -5px; right: -8px; background: #d32f2f; color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; font-weight: bold;}
 
-        /* --- પ્રોડક્ટ લિસ્ટ --- */
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            padding: 15px;
-            flex: 1; 
-        }
-
-        .card {
-            background: #1e1e1e;
-            border: 1px solid var(--gray);
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.2s;
-            position: relative;
-        }
-        
+        /* ગ્રીડ અને કાર્ડ */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; flex: 1; }
+        .card { background: #1e1e1e; border: 1px solid var(--gray); border-radius: 10px; overflow: hidden; transition: transform 0.2s; position: relative; }
         .card:active { transform: scale(0.98); }
-
-        .card img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            border-bottom: 1px solid var(--primary);
-            background-color: #333;
-            transition: opacity 0.3s;
-        }
-
+        .card img { width: 100%; height: 160px; object-fit: cover; border-bottom: 1px solid var(--primary); background-color: #333; transition: opacity 0.3s; }
         .info { padding: 10px; text-align: center; }
         .p-name { font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; color: #eee;}
         .p-price { color: var(--primary); font-weight: bold; font-size: 1.1rem; }
-        
-        .add-btn {
-            background: var(--primary);
-            color: black;
-            border: none;
-            width: 100%;
-            padding: 8px;
-            margin-top: 8px;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+        .add-btn { background: var(--primary); color: black; border: none; width: 100%; padding: 8px; margin-top: 8px; font-weight: bold; border-radius: 5px; cursor: pointer; }
 
-        /* --- એડમિન બટન --- */
-        .admin-btn {
-            position: fixed;
-            bottom: 100px;
-            right: 20px;
-            background: #000;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            font-size: 32px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4);
-            z-index: 90;
-        }
-
-        /* --- ફૂટર --- */
-        .app-footer {
-            text-align: center;
-            padding: 20px;
-            background: #000;
-            color: #777;
-            font-size: 0.8rem;
-            border-top: 1px solid #333;
-            margin-top: auto;
-        }
+        /* એડમિન અને ફૂટર */
+        .admin-btn { position: fixed; bottom: 100px; right: 20px; background: #000; color: var(--primary); border: 2px solid var(--primary); width: 60px; height: 60px; border-radius: 50%; font-size: 32px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 5px 15px rgba(197, 160, 89, 0.4); z-index: 90; }
+        .app-footer { text-align: center; padding: 20px; background: #000; color: #777; font-size: 0.8rem; border-top: 1px solid #333; margin-top: auto; }
         .app-footer a { color: var(--primary); text-decoration: none; }
 
-        /* --- મોડલ (Popup) --- */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            color: #000;
-            z-index: 200;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            padding: 15px;
-            background: #f4f4f4;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #ddd;
-        }
-        
+        /* મોડલ અને અપલોડ */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; color: #000; z-index: 200; overflow-y: auto; }
+        .modal-header { padding: 15px; background: #f4f4f4; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; }
         .modal-title { font-weight: bold; font-size: 1.1rem; }
         .close-btn { font-size: 2rem; border: none; background: none; cursor: pointer; color: #555; }
-
-        /* --- અપલોડ સ્ટાઇલ --- */
         .upload-section { background: #e3f2fd; padding: 20px; text-align: center; border-bottom: 2px solid #2196f3; }
         .camera-label { display: inline-block; background: #2196f3; color: white; padding: 12px 25px; border-radius: 30px; font-weight: bold; cursor: pointer; margin-bottom: 10px; font-size: 1rem; }
         .result-box { display: none; margin-top: 15px; background: white; padding: 10px; border: 1px solid green; border-radius: 5px; }
-
-        /* --- કાર્ટ સ્ટાઇલ --- */
+        
+        /* કાર્ટ અને ફોર્મ */
         .cart-modal { top: unset; bottom: 0; height: auto; max-height: 90vh; border-radius: 20px 20px 0 0; box-shadow: 0 -5px 50px rgba(0,0,0,0.5); }
         .whatsapp-btn { background: #25D366; color: white; width: 100%; padding: 12px; font-weight: bold; border: none; border-radius: 8px; margin-top: 10px; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px;}
-        
-        /* ગ્રાહક વિગત ફોર્મ */
-        .cust-input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            box-sizing: border-box; /* બોક્સની બહાર ન જાય */
-        }
-
+        .cust-input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; box-sizing: border-box; }
         .loader { text-align: center; margin-top: 50px; color: var(--primary); font-size: 1.2rem; }
         .fallback-btn { width: 100%; background: white; color: #d32f2f; border: 1px solid #d32f2f; padding: 10px; border-radius: 5px; font-size: 0.9rem; cursor: pointer; margin-bottom: 5px; font-weight: bold; }
     </style>
@@ -235,7 +106,7 @@
     
     <div id="cartList" style="padding:15px; max-height: 40vh; overflow-y:auto;"></div>
     
-    <div style="padding:15px; background:#fff border-top:1px solid #eee;">
+    <div style="padding:15px; background:#fff; border-top:1px solid #eee;">
         <h4 style="margin:0 0 10px 0; color:#333;">ગ્રાહકની વિગત:</h4>
         <input type="text" id="custName" class="cust-input" placeholder="તમારું નામ (Name)">
         <input type="tel" id="custMobile" class="cust-input" placeholder="મોબાઈલ નંબર (Mobile No.)">
@@ -265,10 +136,16 @@
     // ***************************************************************
 
     let products = [];
-    let cart = {};
+    
+    // --- 1. Cart Initialization (With Auto-Save) ---
+    // પેજ લોડ થાય ત્યારે મેમરીમાંથી કાર્ટ લોડ કરો
+    let cart = JSON.parse(localStorage.getItem('myJewelleryCart')) || {};
 
-    // --- 1. Load Products ---
+    // --- 2. Load Products ---
     async function loadProducts() {
+        // પહેલા કાર્ટ અપડેટ કરી લો (જો રિફ્રેશ કર્યું હોય તો)
+        updateCart();
+
         if(SHEET_URL.includes("તમારી_GOOGLE_SHEET")) {
             console.log("Using Demo Data");
             products = [
@@ -326,7 +203,7 @@
         });
     }
 
-    // --- 2. Admin Logic ---
+    // --- 3. Admin Logic ---
     function openAdmin() {
         let pass = prompt("🔐 એડમિન પાસવર્ડ નાખો:");
         if (pass === ADMIN_PIN) {
@@ -391,7 +268,7 @@
         alert("લિંક કોપી થઈ ગઈ!");
     }
 
-    // --- 3. Cart Logic ---
+    // --- 4. Cart Logic (Updated with Auto-Save) ---
     function addToCart(id) {
         if(cart[id]) cart[id].qty++;
         else cart[id] = { ...products.find(p => p.id === id), qty: 1 };
@@ -399,10 +276,23 @@
         if(navigator.vibrate) navigator.vibrate(50);
     }
 
+    // કાર્ટમાંથી આઈટમ કાઢવા માટે (Optional - જો તમે - બટન મૂકવા માંગતા હોવ તો)
+    function removeFromCart(id) {
+        if(cart[id]) {
+            cart[id].qty--;
+            if(cart[id].qty === 0) delete cart[id];
+        }
+        updateCart();
+    }
+
     function updateCart() {
         let count = 0;
         let total = 0;
         let html = '';
+        
+        // 1. Save to Local Storage (Magic Line)
+        localStorage.setItem('myJewelleryCart', JSON.stringify(cart));
+
         Object.values(cart).forEach(item => {
             count += item.qty;
             total += item.price * item.qty;
@@ -412,7 +302,10 @@
                         <div style="font-weight:bold;">${item.name}</div>
                         <div style="font-size:0.9rem; color:#555;">₹${item.price} x ${item.qty}</div>
                     </div>
-                    <div style="font-weight:bold;">₹${item.price * item.qty}</div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <button onclick="removeFromCart(${item.id})" style="background:#ddd; border:none; width:25px; height:25px; border-radius:50%; font-weight:bold;">-</button>
+                        <div style="font-weight:bold;">₹${item.price * item.qty}</div>
+                    </div>
                 </div>`;
         });
         document.getElementById('count').innerText = count;
@@ -428,11 +321,9 @@
     function checkout() {
         if(Object.keys(cart).length === 0) { alert("કાર્ટ ખાલી છે!"); return; }
         
-        // ગ્રાહકની વિગતો લો
         const name = document.getElementById('custName').value;
         const mobile = document.getElementById('custMobile').value;
 
-        // ચેક કરો કે વિગત ભરી છે કે નહિ
         if(!name || !mobile) {
             alert("કૃપા કરીને તમારું નામ અને મોબાઈલ નંબર લખો.");
             return;
@@ -446,7 +337,15 @@
         });
         msg += `%0A*કુલ રકમ: ₹${total}*`;
 
-        const num = "919276505035"; // દુકાનદારનો નંબર
+        // ઓર્ડર થઈ જાય પછી કાર્ટ ખાલી કરો
+        cart = {};
+        localStorage.removeItem('myJewelleryCart');
+        updateCart();
+        document.getElementById('custName').value = '';
+        document.getElementById('custMobile').value = '';
+        toggleCart();
+
+        const num = "919276505035"; 
         window.open(`https://wa.me/${num}?text=${msg}`, '_blank');
     }
 
